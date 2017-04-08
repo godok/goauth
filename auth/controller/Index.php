@@ -9,7 +9,7 @@ use think\Config;
 class Index extends Controller
 {
     /**
-     * 控制台首页
+     * 控制台
      */
     // http://127.0.0.1/auth/Index/index
     public function index()
@@ -25,6 +25,13 @@ class Index extends Controller
         $data['menu'] = $this->menu2Html( \Godok\Org\Auth::menu("ismenu=1 AND status=1") );
 
 		return $this->fetch('index',$data);
+    }
+    
+    /**
+     * 首页
+     */
+    public function home(){
+        return $this->fetch();
     }
 
     /**
