@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>{$Think.config.site.title} - 头像</title>
+
+    <meta name="keywords" content="{$Think.config.site.keywords}">
+    <meta name="description" content="{$Think.config.site.description}">
+
+    <link href="{$Think.config.site.resource_url}css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}js/plugins/cropper/cropper.min.css" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/animate.min.css" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/style.min.css?v=4.0.0" rel="stylesheet">
+
+</head>
+<style>
+.img-preview-sm {
+    height: 200px;
+    width: 200px;
+}
+
+</style>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+      <div class="row">
+          <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title  back-change">
+                        <h5>修改头像 <small></small></h5>
+                      
+                  </div>
+                    <div class="ibox-content">
+                      
+                      <div class="row">
+                            <div class="col-md-6">
+                                <div class="image-crop">
+                                    <img src="{$Think.cookie.avatar}" width="100%">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>图片预览：</h4>
+                                <div class="img-preview img-preview-sm"></div>
+                                <h4>说明：</h4>
+                                <p>
+                                    你可以选择本地图片编辑，可以把裁剪后的图片保存到本地
+                                    <BR />(*)上传头像不能超过100k
+                              </p>
+                                <div class="btn-group">
+                                    <label title="选择一张本地图片" for="inputImage" class="btn btn-primary">
+                                        <input type="file" accept="image/*" name="file" id="inputImage" class="hide"> 选择一张本地图片
+                                  </label> 
+                                  <label title="下载图片" id="download" class="btn btn-info">保存到本地</label>
+                                </div>
+                                <h4>编辑工具：</h4>
+                                <p>
+                                    
+                              </p>
+                                <div class="btn-group">
+                                    <button class="btn btn-white" id="zoomIn" type="button">放大</button>
+                                    <button class="btn btn-white" id="zoomOut" type="button">缩小</button>
+                                    <button class="btn btn-white" id="rotateLeft" type="button">左旋转</button>
+                                    <button class="btn btn-white" id="rotateRight" type="button">右旋转</button>
+                                    <button class="btn btn-warning" id="setDrag" type="button">自由框选</button>
+                                </div>
+                                <h4></h4>
+                                <div class="btn-group">
+                                  <button class="btn btn-success" id="upload" type="button">上传到服务器</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{$Think.config.site.resource_url}js/jquery.min.js?v=2.1.4"></script>
+    <script src="{$Think.config.site.resource_url}js/bootstrap.min.js?v=3.3.5"></script>
+	<script src="{$Think.config.site.resource_url}js/plugins/layer/layer.js"></script>
+	<script src="{$Think.config.site.resource_url}js/plugins/cropper/cropper.js"></script>
+<script>
+$(document).ready(function() {
+	var o = $(".image-crop > img");
+    $(o).cropper({
+        aspectRatio: 200 / 200,
+        preview: ".img-preview",
+		dragMode : "move",
+        done: function() {}
+    });
+	var r = $("#inputImage");
+    window.FileReader ? r.change(function() {
+        var e, i = new FileReader,
+        t = this.files;
+        t.length && (e = t[0], /^image\/\w+$/.test(e.type) ? (i.readAsDataURL(e), i.onload = function() {
+            r.val(""),
+            o.cropper("reset", !0).cropper("replace", this.result)
+        }) : showMessage("请选择图片文件"))
+    }) : r.addClass("hide"),
+	$("#download").click(function() {
+		var url = o.cropper("getCroppedCanvas", { width: 200, height: 200 }).toDataURL('image/png');
+        window.open(url)
+    }),
+    $("#zoomIn").click(function() {
+        o.cropper("zoom", .1)
+    }),
+    $("#zoomOut").click(function() {
+        o.cropper("zoom", -.1)
+    }),
+    $("#rotateLeft").click(function() {
+        o.cropper("rotate", -15)
+    }),
+    $("#rotateRight").click(function() {
+        o.cropper("rotate", 15)
+    }),
+    $("#setDrag").click(function() {
+        o.cropper("setDragMode", "crop")
+    }),
+	
+	$("#upload").click(function() {
+		//上传图片
+        var form=document.forms[0];  
+		var formData = new FormData(); 
+		var canvas = o.cropper("getCroppedCanvas", { width: 200, height: 200 });
+		canvas.toBlob(function(blob){
+			formData.append("image",blob, "avatar.png");
+			formData.append("image2",blob, "avatar2.png");
+			var layer1 = layer.load(2, {
+				shade: [0.8,'#fff'] //0.8透明度的白色背景
+			});
+			$.ajax({
+				url: "<?php echo \think\Request::instance()->root(); ?>/auth/Avatar",
+				type: "post",
+				dataType: "json",
+				data: formData,
+				cache: false,  
+				contentType: false,  
+				processData: false,
+				success: function (result) {
+					layer.close(layer1);
+					
+					layer.msg(result.msg, {icon: 1});
+				},
+				error: function () {
+					layer.close(layer1);
+					layer.msg(result.msg, {icon: 5});
+				}
+			});
+		},'image/png');
+
+        
+        return false;
+    })
+})
+</script>
+
+</body>
+
+</html>

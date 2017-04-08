@@ -1,0 +1,20 @@
+{
+    "name": "godok/goauth",
+	"type": "godok-app",
+    "description": "base app with goAuth for thinkphp",
+    "license": "Apache-2.0",
+    "keywords": ["godok", "goAuth"],
+    "authors": [{
+        "name": "fafa",
+        "email": "fafa2088@qq.com"
+    }],
+    "require": {
+        "php": ">=5.4.0",
+		"Godok/Org": "*",
+        "Godok/Installer": "*",
+		"topthink/framework": "*"
+    },
+	"extra": {
+        "app-path": "goauth"
+    }
+}

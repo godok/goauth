@@ -1,0 +1,317 @@
+ <!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>{$Think.config.site.title} - 用户管理</title>
+
+    <meta name="keywords" content="{$Think.config.site.keywords}">
+
+    <link href="{$Think.config.site.resource_url}css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/animate.min.css" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/style.min.css?v=4.0.0" rel="stylesheet">
+
+</head>
+<style>
+#listtable .fa{
+	cursor:pointer;
+	color:#1ab394;
+	margin-right:1em;
+}
+</style>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+      <div class="row">
+          <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>用户列表</h5>
+                
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-3">
+                            	<button type="button" class="btn btn-sm btn-primary" id="addBtn"> 创建用户</button>
+                                <button type="button" class="btn btn-sm btn-success" id="saveSelected"> 保存排序</button> </span>
+                            </div>
+                          	<div class="col-sm-8">
+                                <div class="input-group">
+                                <form action="" method="get" enctype="application/x-www-form-urlencoded">
+                                <div class="input-group">
+                                    <input type="text" placeholder="请输入关键词" class="input-sm form-control" value="{$Think.get.keywords ?? ''}" name="keywords">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-sm btn-primary"> 搜索</button> </span>
+                                </div>
+                                </form>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="listtable">
+                                <thead>
+                                    <tr>
+
+                                        <th width="30"><input name="checkall" id="checkall"  type="checkbox" class="i-checks" value="1"></th>
+                                        <th width="80">排序</th>
+                                        <th width="150">用户名</th>
+                                        <th width="60">&nbsp;</th>
+                                        <th width="100">姓名</th>
+                                        <th width="100">昵称</th>
+                                        <th width="120">电话</th>
+                                        <th width="100">状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                	{volist name="list" id="vo"}
+                                    <tr data-id="{$vo.id}" >
+                                        <td>
+                                        	{if ($vo.id != 1)}
+                                            <input name="ids[]"  type="checkbox" class="i-checks" value="{$vo.id}">
+                                            {/if}
+                                        </td>
+                                        <td><input type="text" {if ($vo.id == 1)}disabled{/if} class="form-control" value="{$vo.listorder}"></td>
+                                        <td>{$vo.username}</td>
+                                        <td><img src="{$vo.avatar}" width="30" height="30" /></td>
+                                        <td> {$vo.name}</td>
+                                        <td>{$vo.nickname}</td>
+                                        <td>{$vo.phone}</td>
+                                        <td>
+                                        {switch name="vo.status"}
+                                            {case value="0"}<button type="button" class="btn btn-default btn-xs btn-status">已禁用</button>{/case}
+                                            {case value="1"}<button type="button" class="btn btn-primary btn-xs btn-status">已启用</button>{/case}
+                                            {case value="2"}<button type="button" class="btn btn-default btn-xs btn-status">已禁用</button>{/case}
+                                        {/switch}
+                                        </td>
+                                        <td><i class="fa fa-edit"> 修改</i> <i class="fa fa-wrench"> 绑定权限组</i> <i class="fa fa-trash-o"> 删除</i>
+                                        </td>
+                                    </tr>
+                                   {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>{$list->render()}</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{$Think.config.site.resource_url}js/jquery.min.js?v=2.1.4"></script>
+    <script src="{$Think.config.site.resource_url}js/bootstrap.min.js?v=3.3.5"></script>
+    <script src="{$Think.config.site.resource_url}js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="{$Think.config.site.resource_url}js/plugins/iCheck/icheck.min.js"></script>
+    <script src="{$Think.config.site.resource_url}js/plugins/layer/layer.js"></script>
+</body>
+
+</html>
+<script>
+var layer_font;
+var $editTr;
+function groupSucess(code) {
+	layer.close(layer_font);
+	layer.msg('修改成功！', {icon: 1});
+}
+function editSuccess(data) {
+	layer.close(layer_font);
+	if(data.id) {
+		layer.msg('创建成功！', {icon: 1});
+		var $tr = '<tr data-id="'+data.id+'" >\
+                                        <td>\
+                                            <input name="ids[]"  type="checkbox" class="i-checks" value="'+data.id+'">\
+                                        </td>\
+                                        <td><input type="text" class="form-control" value="0"></td>\
+                                        <td>'+data.username+'</td>\
+                                        <td><img src="'+data.avatar+'" width="30" height="30" /></td>\
+                                        <td> '+data.name+'</td>\
+                                        <td>'+data.nickname+'</td>\
+                                        <td>'+data.phone+'</td>\
+                                        <td><button type="button" class="btn btn-primary btn-xs btn-status">已启用</button></td>\
+                                        <td><i class="fa fa-edit"> 修改</i> <i class="fa fa-wrench"> 绑定权限组</i> <i class="fa fa-trash-o"> 删除</i>\
+                                        </td>\
+                                    </tr>';
+		$("#listtable tbody").append($tr);
+		$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",});
+	} else {
+		$editTr.find("td:eq(2)").html(data.username);
+		$editTr.find("td:eq(3) img").attr('src',data.avatar);
+		$editTr.find("td:eq(4)").html(data.name);
+		$editTr.find("td:eq(5)").html(data.nickname);
+		$editTr.find("td:eq(6)").html(data.phone);
+		layer.msg('修改成功！', {icon: 1});
+	}
+	
+}
+$(document).ready(function() {
+	$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",});
+	//全选
+	$("#checkall").bind("ifChecked",function(){
+		$("input[name='ids[]']").iCheck("check");
+	});
+	//取消全选
+	$("#checkall").bind("ifUnchecked",function(){
+		$("input[name='ids[]']").iCheck("uncheck");
+	});
+	
+	$("#saveSelected").bind("click",function(){
+		var list = [];
+		$("input[name='ids[]']:checked").each(function(index, element) {
+            $tr = $(this).closest("tr");
+			var data = {
+				id : $tr.data("id"),
+				listorder : $tr.find("td:eq(1) input").val()
+			}
+			list.push(data);
+			
+        });
+		if(list.length < 1) {
+			layer.msg('请至少选中一项', {icon: 5});
+			return false;
+		}
+		
+		if (
+			post('/auth/User/edit', window.JSON.stringify(list))
+		){
+			layer.msg('保存成功！', {icon: 1});
+		} 
+		
+	});
+    //新增按钮
+	$("#addBtn").bind("click",function(){
+		layer_font = layer.open({
+		  type: 2,
+		  title: '新增用户',
+		  shadeClose: true,
+		  shade: 0.8,
+		  area: ['70%', '80%'],
+		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/User/add' //iframe的url
+	  	});
+	});
+	//修改按钮
+	$("#listtable").on("click",".fa-edit",function(){
+		$editTr = $(this).closest("tr");
+		var id = $editTr.data("id");
+		layer_font = layer.open({
+		  type: 2,
+		  title: '修改用户',
+		  shadeClose: true,
+		  shade: 0.8,
+		  area: ['70%', '80%'],
+		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/User/edit?id='+id //iframe的url
+	  	});
+	})
+	//绑定权限组按钮
+	$("#listtable").on("click",".fa-wrench",function(){
+		$tr = $(this).closest("tr");
+		var id = $tr.data("id");
+		layer_font = layer.open({
+		  type: 2,
+		  title: '绑定权限组',
+		  shadeClose: true,
+		  shade: 0.8,
+		  area: ['40%', '80%'],
+		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/User/group?id='+id //iframe的url
+	  	});
+	})
+
+	//启用/禁用按钮注册
+	$("#listtable").on("click",".btn-status",function(){
+		var $tr = $(this).closest("tr");
+		var id = $tr.data("id");
+		var status = $(this).hasClass("btn-primary") ? 0 : 1;
+		if(
+			post('/auth/User/edit',{
+				'id' : id,
+				'status' : status,
+				
+			})
+		) {
+			if( status ) {
+				$(this).removeClass("btn-default").addClass("btn-primary").html("已启用");
+
+			} else {
+				$(this).removeClass("btn-primary").addClass("btn-default").html("已禁用");
+
+			}
+			
+		}
+		
+	})
+	
+	
+	
+	//删除按钮注册
+	$("#listtable").on("click",".fa-trash-o",function(){
+		var $tr = $(this).closest("tr");
+		var id = $tr.data("id");
+		layer.confirm('把用户将被放入回收站？', {
+			btn: ['确定删除','不删除'], //按钮
+			shade: false //不显示遮罩
+		}, function(){
+			//确定删除
+			$.ajax({
+				type : 'POST',
+				url : '<?php echo \think\Request::instance()->root(); ?>/auth/User/delete',
+				dataType : 'json',
+				data : {id:id},
+				async:false,
+				success : function(result) {
+					//layer.close(layer1);
+					if(0 === result.code) {
+						$tr.remove();
+						layer.msg(result.msg, {icon: 1});
+					}  else  {
+						//删除失败
+						layer.msg(result.msg, {icon: 5});
+					}
+				},
+				error : function(){
+					res = false;
+					layer.msg('服务器错误！请稍后重试', {icon: 2});
+				}
+			})
+		},
+		function(){
+			
+		});
+
+		
+	});
+	
+	
+	//修改
+	function post(url,formData){
+		var res = false;
+		$.ajax({
+			type : 'POST',
+			url : '<?php echo \think\Request::instance()->root(); ?>'+url,
+			dataType : 'json',
+			data : formData,
+			async:false,
+			success : function(result) {
+				//layer.close(layer1);
+				if(0 === result.code) {
+					res = result;
+				}  else  {
+					//修改失败
+					res = false;
+					layer.msg(result.msg, {icon: 5});
+				}
+			},
+			error : function(){
+				res = false;
+				layer.msg('服务器错误！请稍后重试', {icon: 2});
+			}
+		})
+		return res;
+	}
+});	
+</script>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>{$Think.config.site.title} - 登录</title>
+    <meta name="keywords" content="{$Think.config.site.keywords}">
+    <meta name="description" content="{$Think.config.site.description}">
+
+    <link href="{$Think.config.site.resource_url}css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+
+    <link href="{$Think.config.site.resource_url}css/animate.min.css" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/style.min.css?v=4.0.0" rel="stylesheet">
+	<link href="{$Think.config.site.resource_url}css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+</head>
+<style>
+
+.avatar div{
+	overflow: hidden;
+	-moz-border-radius: 10%;
+	-webkit-border-radius: 10%;
+	border-radius: 10%;
+	margin:auto;
+	width:200px;
+	height:200px;
+}
+.avatar img {
+	width:200px;
+	height:200px;
+	display:block;
+}
+</style>
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+				{empty name='$Think.cookie.avatar'}
+                <h1 class="logo-name">A+</h1>
+				{else}
+				<h1 class="avatar"><div><img src='{$Think.cookie.avatar}'/></div></h1>
+				{/empty}
+
+            </div>
+			{empty name='$Think.cookie.nickname'}
+            <h3>欢迎使用 {$Think.config.site.title}</h3>
+			{else}
+			<h3>{$Think.cookie.nickname}</h3>
+			{/empty}
+
+          
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="用户名" id="username" required value="{$Think.cookie.username}">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="密码" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
+
+
+                <p class="text-muted text-center"> <a href="Login/forget"><small>忘记密码了？</small></a> | <a href="/auth/register">注册一个新账号</a>
+                </p>
+
+        
+        </div>
+    </div>
+    <script src="{$Think.config.site.resource_url}js/jquery.min.js?v=2.1.4"></script>
+    <script src="{$Think.config.site.resource_url}js/bootstrap.min.js?v=3.3.5"></script>
+	<script src="{$Think.config.site.resource_url}js/plugins/layer/layer.js"></script>
+
+</body>
+
+</html>
+<script>
+$(document).ready(function(){
+	$("button").bind('click',function(){
+		 doLogin();
+	})
+	$("#password").bind('keyup',function(e){
+		 var key = e.which;
+		 if( 13 == key ) {
+			doLogin();
+		 }
+	})
+	function doLogin(){
+		var username = $("#username").val();
+		if(username == '') {
+			layer.tips('用户名不能为空！', '.form-group:eq(0)');
+			$("#username").focus();
+			return false;
+		}
+		var password = $("#password").val();
+		if(password == '' ) {
+			layer.tips('密码不能为空！', '.form-group:eq(1)');
+			$("#password").focus();
+			return false;
+		}
+		/*
+		var layer1 = layer.load(2, {
+			shade: [0.8,'#fff'] //0.1透明度的白色背景
+		});
+		*/
+		$.ajax({
+			type : 'POST',
+			url : '<?php echo \think\Request::instance()->root(); ?>/auth/Login',
+			dataType : 'json',
+			data : {username : username, password : password},
+			success : function(result) {
+				//layer.close(layer1);
+				if(0 === result.code) {
+					layer.msg('登录成功，即将跳转到控制台！', {icon: 1});
+					if(result.url) {
+						setTimeout(function(){
+							location.href = result.url;
+						},1500);
+					}
+				} else if ( -1000 === result.code) {
+					//帐号不存在
+					layer.tips(result.msg, '.form-group:eq(0)');
+				}else if ( -1001 === result.code) {
+					//帐号不存在
+					layer.tips(result.msg, '.form-group:eq(0)');
+				} else if ( -1010 === result.code) {
+					//密码错误
+					layer.tips(result.msg, '.form-group:eq(1)');
+				} else  {
+					//密码错误
+					layer.msg(result.msg, {icon: 5});
+				}
+			},
+			error : function(){
+				//layer.close(layer1);
+				layer.msg('服务器错误！请稍后重试', {icon: 2});
+			}
+		})
+	};
+	{notempty name='$Think.cookie.username'}
+	$("#password").focus();
+	{/notempty}
+})
+</script>

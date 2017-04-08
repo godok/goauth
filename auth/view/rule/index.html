@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>{$Think.config.site.title} - 权限菜单管理</title>
+
+    <meta name="keywords" content="{$Think.config.site.keywords}">
+    <meta name="description" content="{$Think.config.site.description}">
+
+    <link href="{$Think.config.site.resource_url}css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/animate.min.css" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/style.min.css?v=4.0.0" rel="stylesheet">
+    <link href="{$Think.config.site.resource_url}css/plugins/iCheck/custom.css" rel="stylesheet">
+
+</head>
+<style>
+.dd-status-1{
+	color:#666;
+}
+.dd-status-0{
+	color:#aaa;
+}
+.dd-tool-right{
+	position: absolute;
+    right: 0;
+    top: 0;
+}
+.dd-tool-right .fa {
+	color:#1ab394;
+	margin-right:1em;
+	line-height:32px;
+	cursor:pointer;
+}
+
+.dd-tool-right .fa-ban,.dd-tool-right .fa-check-circle{
+	margin-right:2em;
+}
+
+.dd-tool-right .fa-ban{
+	color:#ed5565;
+}
+.dd-url{
+	color:#999;
+}
+
+
+</style>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-4">
+                <div id="nestable-menu">
+                	<button type="button" data-action="addnew" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> 添加顶级菜单</button>
+                    <button type="button" data-action="expand-all" class="btn btn-white btn-sm">展开所有</button>
+                    <button type="button" data-action="collapse-all" class="btn btn-white btn-sm">收起所有</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>权限菜单管理</h5>
+                    </div>
+                    <div class="ibox-content">
+
+                        <p class="m-b-lg">
+                            <strong>菜单</strong> 支持拖动排序和触摸屏，拖动的时候 ，试着左右移动可以把菜单移动到其他菜单的子菜单中，修改排序后自动保存到服务器，无需提交。灰色菜单名为已禁用，菜单名后面有 ≡ 的表示显示在菜单栏。
+                        </p>
+
+                        <div class="dd" id="rid0" >
+                            {$menu}
+                        </div>
+              
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!----编辑框---->
+    <div id="modal-form" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-7 b-r">
+                            <h3 class="m-t-none m-b" id="modal_title">添加权限菜单</h3>
+
+                            <form id="editForm" role="form" class="form-horizontal">
+                            <input type="hidden" name="pid" value="0"/>
+                            <input type="hidden" name="id" value="0"/>
+                            <input type="hidden" name="status" value="1"/>
+                            <input type="hidden" name="ismenu" value="1"/>
+                            <input type="hidden" name="listorder" value="9999"/>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">菜单名：</label>
+                                    <div class="col-sm-8">
+                                    	<input type="text" name="title" placeholder="请输入菜单的显示名称" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">模块：</label>
+                                    <div class="col-sm-8">
+                                    	<input type="text" name="module"  class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">控制器：</label>
+                                    <div class="col-sm-8">
+                                    	<input type="text" name="controller"  class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">行为：</label>
+                                    <div class="col-sm-8">
+                                    	<input type="text" name="action"  class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-12 control-label" style="text-align:left">附加请求参数：</label>
+                                    <div class="col-sm-12">
+                                    	<input type="text" name="condition" placeholder="如：type=1&do=dee" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">图标：</label>
+                                    <div class="col-sm-8">
+                                    	<input type="text" name="icon"  class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label"> </label>
+                                    <div class="col-sm-7 i-checks">
+                                    	<label>
+                                            <input type="checkbox" name="ismenu2" value="1" checked=""> <i></i> 显示到菜单栏</label>
+                                    </div>
+                                </div>
+                                <div style="text-align:center;">
+                                    <button class="btn btn-sm btn-primary m-t-n-xs" type="button" ><strong>保存</strong>
+                                    </button>
+                                    
+                                    <button class="btn btn-sm btn-white  m-t-n-xs" type="button" ><strong>取消</strong>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-5" style="color:#aaa;">
+                            <h4>说明:</h4>
+                            <p>根据Request中的module、controller、action、param 4个变量匹配。<br />匹配中一条或多条，只要用户拥有其中一条则可以通过验证。<br />未匹配中：阻止访问。</p>
+                            <p>匹配多个用小逗号“,”隔开</p>
+                            <p> “*” 表示匹配所有</p>
+                            <p>module、controller都不为空或*时，会自动生成url</p>
+                            <p>附加参数“=”后面值可以是正则表达式</p>
+							<p>显示到菜单栏会自动生成为菜单</p>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-------->
+    <script src="{$Think.config.site.resource_url}js/jquery.min.js?v=2.1.4"></script>
+    <script src="{$Think.config.site.resource_url}js/bootstrap.min.js?v=3.3.5"></script>
+    <script src="{$Think.config.site.resource_url}js/content.min.js?v=1.0.0"></script>
+    <script src="{$Think.config.site.resource_url}js/plugins/nestable/jquery.nestable.js"></script>
+    <script src="{$Think.config.site.resource_url}js/plugins/iCheck/icheck.min.js"></script>
+    <script src="{$Think.config.site.resource_url}js/plugins/layer/layer.js"></script>
+<script>
+var layer_font;
+function setFontawesome(classname){
+	layer.close(layer_font);
+	$("#editForm input[name='icon']").val(classname);
+}
+$(document).ready(function() {
+	$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})
+    $("#rid0").nestable({
+        group: 1
+    }).on("change", saveOrder);
+	$("#editForm :checkbox").bind("ifChecked",function(){
+		$("#editForm input[name='ismenu']").val(1);
+	});
+	$("#editForm :checkbox").bind("ifUnchecked",function(){
+		$("#editForm input[name='ismenu']").val(0);
+	});
+	//展开收起
+    $("#nestable-menu").on("click",
+    function(e) {
+        var target = $(e.target),
+        action = target.data("action");
+        if (action === "expand-all") {
+            $(".dd").nestable("expandAll")
+        }
+        if (action === "collapse-all") {
+            $(".dd").nestable("collapseAll")
+        }
+		//添加顶级菜单
+		if (action === "addnew") {
+            $("#editForm input[type='text']").val("");
+			$("#editForm input[name='id']").val("");
+			$("#editForm input[name='pid']").val(0);
+			$("#editForm input[name='status']").val(1);
+			$("#editForm input[name='listorder']").val($("#rid0").find('ol').first().children('.dd-item').length+1);
+			$("#editForm input[name='ismenu']").val(1);
+			$("#editForm :checkbox").iCheck('check');
+			$("#modal_title").html('添加顶级菜单');
+			$('#modal-form').modal('show');
+        }
+    });
+	//保存按钮注册
+	$("#modal-form .btn-primary").bind("click",function(){
+		var formData = $("#modal-form form").serialize();
+		var id = $("#editForm input[name='id']").val();
+		var result =false;
+		if(id == 0) {
+			//新增
+			if( result = post('/auth/Rule/add',formData) ) {
+				layer.msg(result.msg, {icon: 1});
+				if( $(result.pid).children('ol').length < 1 ) {
+					$(result.pid).append('<ol class="dd-list"></ol>');
+				}
+				$(result.pid).children('ol').append( result.menu );
+			}
+		} else {
+			//修改
+			if( result = post('/auth/Rule/edit',formData) ) {
+				//修改
+				layer.msg(result.msg, {icon: 1});
+				$(result.id).children(".dd-handle").replaceWith(result.handle);
+				if(result.data.title) {
+					$(result.id).attr('title',result.data.title);
+				}
+
+				if(result.data.module) {
+					$(result.id).data('module',result.data.module);
+				}
+				if(result.data.controller) {
+					$(result.id).data('controller',result.data.controller);
+				}
+				if(result.data.action) {
+					$(result.id).data('action',result.data.action);
+				}
+				if(result.data.condition) {
+					$(result.id).data('condition',result.data.condition);
+				}
+				if(result.data.ismenu) {
+					$(result.id).data('ismenu',result.data.ismenu);
+				} else {
+					$(result.id).data('ismenu',0);
+				}
+				if(result.data.icon) {
+					$(result.id).data('icon',result.data.icon);
+				}
+			}
+		}
+		$('#modal-form').modal('hide');
+		save(formData);
+	})
+	//取消按钮注册
+	$("#modal-form .btn-white").bind("click",function(){
+		$('#modal-form').modal('hide');
+	})
+	//启用按钮注册
+	$("#rid0").on("click",".fa-ban",function(){
+		var $li = $(this).closest("li");
+		var id = $li.data("id");
+		if(
+			post('/auth/Rule/edit',{
+				'id' : id,
+				'status' : 1
+			})
+		) {
+			$(this).removeClass("fa-ban").addClass("fa-check-circle").attr("title","点击禁用");
+			$(this).closest('.dd-item').find(".dd-handle").addClass("dd-status-1").removeClass("dd-status-0");
+			layer.msg('已启用！', {icon: 1});
+		}
+		
+	})
+	//禁用按钮注册
+	$("#rid0").on("click",".fa-check-circle",function(){
+		var $li = $(this).closest("li");
+		var id = $li.data("id");
+		if(
+			post('/auth/Rule/edit',{
+				'id' : id,
+				'status' : 0
+			})
+		) {
+			$(this).removeClass("fa-check-circle").addClass("fa-ban").attr("title","点击启用");
+			$(this).closest('.dd-item').find(".dd-handle").addClass("dd-status-0").removeClass("dd-status-1");
+			layer.msg('已禁用！', {icon: 2});
+		}
+	});
+	//添加子菜单按钮注册
+	$("#rid0").on("click",".fa-plus",function(){
+		var $li = $(this).closest("li");
+		var data = $li.data();
+		$("#editForm input[type='text']").val("");
+		$("#editForm input[name='id']").val("");
+		$("#editForm input[name='pid']").val(data.id);
+		var listorder = $li.children('.dd-list').children('.dd-item').length;
+		$("#editForm input[name='listorder']").val(listorder);
+		$("#editForm input[name='ismenu']").val(1);
+		$("#editForm :checkbox").iCheck('check');
+		$("#modal_title").html('添加子菜单');
+		$('#modal-form').modal('show');
+		
+	});
+	//编辑按钮注册
+	$("#rid0").on("click",".fa-edit",function(){
+		var $li = $(this).closest("li");
+		var data = $li.data();
+		$("#editForm input[name='id']").val(data.id);
+		$("#editForm input[name='pid']").val(data.pid);
+		$("#editForm input[name='listorder']").val(data.listorder);
+		$("#editForm input[name='title']").val($li.attr("title"));
+		$("#editForm input[name='module']").val(data.module);
+		$("#editForm input[name='controller']").val(data.controller);
+		$("#editForm input[name='action']").val(data.action);
+		$("#editForm input[name='condition']").val(data.condition);
+		$("#editForm input[name='icon']").val(data.icon);
+		$("#editForm input[name='status']").val(data.status);
+		$("#editForm input[name='ismenu']").val(data.ismenu);
+		$("#modal_title").html('编辑菜单');
+		if( data.ismenu ) {
+			$("#editForm :checkbox").iCheck('check');
+		} else {
+			$("#editForm :checkbox").iCheck('uncheck');
+		}
+		$('#modal-form').modal('show');
+	});
+	//删除按钮注册
+	$("#rid0").on("click",".fa-trash-o",function(){
+		var $li = $(this).closest("li");
+		var id = $li.data("id");
+		layer.confirm('删除后不可恢复！确认删除？', {
+			btn: ['确定删除','连同子菜单一并删除','不删除'], //按钮
+			shade: false //不显示遮罩
+		}, function(){
+			//确定删除
+			var result = false;
+			if(
+			 result = post('/auth/Rule/delete',{id:id})
+			) {
+				layer.msg(result.msg, {icon: 1});
+				if(result.children > 0) {
+					location.reload(true);
+				} else {
+					$li.remove();
+				}
+			}
+		}, function(){
+			//连子菜单一同删除
+			var result = false;
+			if(
+			  result = post('/auth/Rule/delete',{id:id,more:1})
+			) {
+				layer.msg(result.msg, {icon: 1});
+				$li.remove();
+			}
+		}, function(){
+			
+		});
+
+		
+	});
+	//图标选择按钮注册
+	$("#modal-form input[name='icon']").bind("click",function(){
+		//$('#modal-form').modal('hide');
+		  layer_font = layer.open({
+		  type: 2,
+		  title: '图标选择',
+		  shadeClose: true,
+		  shade: 0.8,
+		  area: ['70%', '90%'],
+		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/Public_demo/fontawesome' //iframe的url
+	  	});
+	})
+	
+
+	//排序修改
+	function saveOrder()
+	{
+		var data,
+			depth = 0;
+		step  = function(level, depth)
+		{
+			
+			var array = [ ],
+				changed = [],
+				items = level.children('.dd-item');
+			items.each(function()
+			{
+				var li   = $(this),
+					item = $.extend({}, li.data()),
+					sub  = li.children('ol');
+				if (sub.length) {
+					array = $.extend(array, step(sub, depth + 1))
+				}
+				var neworder = li.index();
+				var pid = item.pid;
+				var $parent = li.parent().closest(".dd-item");
+				if($parent.length > 0 ){
+					
+					pid = $parent.data("id");
+				}
+				
+				if(pid != item.pid || neworder != item.listorder) {
+					li.data('pid',pid);
+					li.data('listorder',neworder);
+					array.push({
+						id : item.id,
+						listorder : neworder,
+						pid : pid
+					});
+				}
+				
+				
+			});
+			return array;
+		};
+		data = step($("#rid0").find('ol').first(), depth);
+		if(data.length > 0) {
+			post('/auth/Rule/edit',window.JSON.stringify(data));
+		}
+		
+	}
+	//提交保存
+	function post(url,formData){
+		var res = false;
+		$.ajax({
+			type : 'POST',
+			url : '<?php echo \think\Request::instance()->root(); ?>'+url,
+			dataType : 'json',
+			data : formData,
+			async:false,
+			success : function(result) {
+				//layer.close(layer1);
+				if(0 === result.code) {
+					res = result;
+				}  else  {
+					//修改失败
+					res = false;
+					layer.msg(result.msg, {icon: 5});
+				}
+			},
+			error : function(){
+				res = false;
+				layer.msg('服务器错误！请稍后重试', {icon: 2});
+			}
+		})
+		return res;
+	}
+});	
+</script>
+
+</body>
+
+</html>
