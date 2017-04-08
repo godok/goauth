@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS `goa_auth_group` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户组表' AUTO_INCREMENT=28 ;
 INSERT INTO `goa_auth_group` (`id`, `title`, `status`, `rules`, `description`, `listorder`) VALUES
 (1, '超级管理员', 1, 'all', '拥有所有权限', 0),
-(2, '登录用户', 1, '194,198,196,200,195', '作用于所有登录用户', 0),
-(3, '游客', 1, '199,197', '未登录访客默认权限', 0);
+(2, '登录用户', 1, '4,5,6,7,8', '作用于所有登录用户', 0),
+(3, '游客', 1, '2,3', '未登录访客默认权限', 0);
 CREATE TABLE IF NOT EXISTS `goa_auth_group_relation` (
   `uid` int(11) unsigned NOT NULL COMMENT '用户id',
   `group_id` int(11) unsigned NOT NULL COMMENT '用户组id',
