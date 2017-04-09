@@ -59,13 +59,13 @@
                                     <tr>
 
                                         <th width="30"><input name="checkall" id="checkall"  type="checkbox" class="i-checks" value="1"></th>
-                                        <th width="80">排序</th>
-                                        <th width="150">用户名</th>
+                                        <th width="60">排序</th>
+                                        <th width="100">用户名</th>
                                         <th width="60">&nbsp;</th>
-                                        <th width="100">姓名</th>
-                                        <th width="100">昵称</th>
-                                        <th width="120">电话</th>
-                                        <th width="100">状态</th>
+                                        <th width="80">姓名</th>
+                                        <th width="80">昵称</th>
+                                        <th width="110">电话</th>
+                                        <th width="80">状态</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
@@ -90,7 +90,7 @@
                                             {case value="2"}<button type="button" class="btn btn-default btn-xs btn-status">已禁用</button>{/case}
                                         {/switch}
                                         </td>
-                                        <td><i class="fa fa-edit"> 修改</i> <i class="fa fa-wrench"> 绑定权限组</i> <i class="fa fa-trash-o"> 删除</i>
+                                        <td><i class="fa fa-edit"> 修改</i> <i class="fa fa-wrench"> 权限</i> <i class="fa fa-trash-o"> 删除</i>
                                         </td>
                                     </tr>
                                    {/volist}
@@ -135,7 +135,7 @@ function editSuccess(data) {
                                         <td>'+data.nickname+'</td>\
                                         <td>'+data.phone+'</td>\
                                         <td><button type="button" class="btn btn-primary btn-xs btn-status">已启用</button></td>\
-                                        <td><i class="fa fa-edit"> 修改</i> <i class="fa fa-wrench"> 绑定权限组</i> <i class="fa fa-trash-o"> 删除</i>\
+                                        <td><i class="fa fa-edit"> 修改</i> <i class="fa fa-wrench"> 权限</i> <i class="fa fa-trash-o"> 删除</i>\
                                         </td>\
                                     </tr>';
 		$("#listtable tbody").append($tr);
@@ -191,7 +191,7 @@ $(document).ready(function() {
 		  title: '新增用户',
 		  shadeClose: true,
 		  shade: 0.8,
-		  area: ['70%', '80%'],
+		  area: ['90%', '90%'],
 		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/User/add' //iframe的url
 	  	});
 	});
@@ -204,7 +204,7 @@ $(document).ready(function() {
 		  title: '修改用户',
 		  shadeClose: true,
 		  shade: 0.8,
-		  area: ['70%', '80%'],
+		  area: ['90%', '90%'],
 		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/User/edit?id='+id //iframe的url
 	  	});
 	})
@@ -217,7 +217,7 @@ $(document).ready(function() {
 		  title: '绑定权限组',
 		  shadeClose: true,
 		  shade: 0.8,
-		  area: ['40%', '80%'],
+		  area: ['90%', '80%'],
 		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/User/group?id='+id //iframe的url
 	  	});
 	})
