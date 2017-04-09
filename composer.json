@@ -10,9 +10,9 @@
     }],
     "require": {
         "php": ">=5.4.0",
-		"Godok/Org": ">=1.0",
-        "Godok/Installer": ">=1.0",
-		"topthink/framework": ">=5.0"
+		"Godok/Org": "1.*",
+        "Godok/Installer": "1.*",
+		"topthink/framework": "5.0.*"
     },
 	"extra": {
         "app-path": "goauth"
