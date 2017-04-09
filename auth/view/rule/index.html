@@ -225,6 +225,7 @@ $(document).ready(function() {
 				layer.msg(result.msg, {icon: 1});
 				if( $(result.pid).children('ol').length < 1 ) {
 					$(result.pid).append('<ol class="dd-list"></ol>');
+					$(result.pid).prepend('<button data-action="collapse" type="button">关闭</button><button data-action="expand" type="button" style="display: none;">展开</button>');
 				}
 				$(result.pid).children('ol').append( result.menu );
 			}
@@ -261,7 +262,6 @@ $(document).ready(function() {
 			}
 		}
 		$('#modal-form').modal('hide');
-		save(formData);
 	})
 	//取消按钮注册
 	$("#modal-form .btn-white").bind("click",function(){
@@ -405,7 +405,7 @@ $(document).ready(function() {
 					array = $.extend(array, step(sub, depth + 1))
 				}
 				var neworder = li.index();
-				var pid = item.pid;
+				var pid = 0;
 				var $parent = li.parent().closest(".dd-item");
 				if($parent.length > 0 ){
 					

@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `goa_auth_group` (
   `description` varchar(255) NOT NULL DEFAULT '' COMMENT '说明',
   `listorder` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户组表' AUTO_INCREMENT=28 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户组表' ;
 INSERT INTO `goa_auth_group` (`id`, `title`, `status`, `rules`, `description`, `listorder`) VALUES
 (1, '超级管理员', 1, 'all', '拥有所有权限', 0),
 (2, '登录用户', 1, '4,5,6,7,8', '作用于所有登录用户', 0),
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `goa_auth_rule` (
   `icon` varchar(45) NOT NULL DEFAULT '' COMMENT '图标',
   `listorder` int(11) NOT NULL DEFAULT '9999' COMMENT '排序',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='规则表' AUTO_INCREMENT=210 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='规则表' ;
 INSERT INTO `goa_auth_rule` (`id`, `pid`, `title`, `module`, `controller`, `action`, `status`, `ismenu`, `condition`, `icon`, `listorder`) VALUES
 (1, 0, '系统设置', '', '', '', 1, 1, '', 'fa fa-gears', 0),
 (2, 0, '游客权限', '', '', '', 1, 0, '', '', 2),
@@ -74,6 +74,6 @@ CREATE TABLE IF NOT EXISTS `goa_users` (
   `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`),
   KEY `user_login_key` (`username`) USING BTREE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=111 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 INSERT INTO `goa_users` (`id`, `username`, `password`, `name`, `nickname`, `avatar`, `email`, `email_code`, `phone`, `status`, `register_time`, `last_login_ip`, `last_login_time`, `listorder`, `deleted`) VALUES
 (1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', '魏强', '老四', 'http://goa.godok.cn/statics/images/avatar/default.jpg', 'fafa2088@qq.com', '', 13541350044, 1, 1449199996, '127.0.0.1', 1491535486, 0, 0);
