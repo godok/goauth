@@ -23,8 +23,8 @@
 .dd-status-1{
 	color:#666;
 }
-.dd-status-0{
-	color:#aaa;
+.dd-status-0,.dd-status-0 em{
+	color:#bbb;
 }
 .dd-tool-right{
 	position: absolute;
@@ -278,7 +278,7 @@ $(document).ready(function() {
 			})
 		) {
 			$(this).removeClass("fa-ban").addClass("fa-check-circle").attr("title","点击禁用");
-			$(this).closest('.dd-item').find(".dd-handle").addClass("dd-status-1").removeClass("dd-status-0");
+			$(this).closest(".dd-handle").addClass("dd-status-1").removeClass("dd-status-0");
 			layer.msg('已启用！', {icon: 1});
 		}
 		
@@ -294,7 +294,7 @@ $(document).ready(function() {
 			})
 		) {
 			$(this).removeClass("fa-check-circle").addClass("fa-ban").attr("title","点击启用");
-			$(this).closest('.dd-item').find(".dd-handle").addClass("dd-status-0").removeClass("dd-status-1");
+			$(this).closest(".dd-handle").addClass("dd-status-0").removeClass("dd-status-1");
 			layer.msg('已禁用！', {icon: 2});
 		}
 	});
