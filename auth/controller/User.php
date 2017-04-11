@@ -100,10 +100,10 @@ class User extends Controller
     {
         if ( Request::instance()->isPost() ) {
             $data = Request::instance()->only('username,password,name,nickname,avator,email,phone','post');
-            if (!isset($data['username']) || !Filter::username($data['username']) ) {
+            if (!isset($data['username']) || empty(Filter::username($data['username'])) ) {
                 return ['code'=>-1000, 'msg'=>'用户名格式错误！'];
             }
-            if ( isset($data['password']) && Filter::password($data['password']) ) {
+            if ( isset($data['password']) && !empty(Filter::password($data['password'])) ) {
                 $data['password'] = md5($data['password']);
             } else {
                 return ['code'=>-1010, 'msg'=>'密码格式错误！'];
@@ -128,7 +128,7 @@ class User extends Controller
                 return ['code'=>-1040, 'msg'=>'创建失败！'];
             }
         } else {
-            return $this->fetch('edit',['title'=>'创建用户']);
+            return $this->fetch('edit',['title'=>'用户信息']);
         }
         
     }
@@ -200,10 +200,10 @@ class User extends Controller
                     $data = Request::instance()->only('username,password,name,nickname,avator,email,phone,status,listorder','post');
                 }
                 
-                if ( isset($data['username']) && !Filter::username($data['username']) ) {
+                if ( isset($data['username']) && empty(Filter::username($data['username'])) ) {
                     return ['code'=>-1000, 'msg'=>'用户名格式错误！'];
                 }
-                if (isset($data['password']) && Filter::password($data['password']) ) {
+                if (isset($data['password']) && !empty(Filter::password($data['password'])) ) {
                     $data['password'] = md5($data['password']);
                 } elseif ( isset($data['password']) && !empty($data['password']) ) {
                     return ['code'=>-1010, 'msg'=>'密码格式错误！'];
@@ -247,7 +247,7 @@ class User extends Controller
             if ( empty($id) ){
                 return '$_GET["id"]不能为空！';
             }
-            $data = ['id'=>$id,'title'=>'修改帐号'];
+            $data = ['id'=>$id,'title'=>'用户信息'];
             $data['user'] = Db::name(Config::get('auth.table_user'))->where('id',$id)->find();
             //获取用户组信息
             $data['groups'] = Auth::getGroups($id);

@@ -51,7 +51,8 @@ class Index extends Controller
                 if( empty($li['module']) || empty($li['controller']) || '*' == $li['module'] || '*' == $li['controller'] ) {
                     $menu .= '<a href="javascript:void(0)" >';
                 } else {
-                    $href = \think\Request::instance()->root().'/'. $li['module'] . '/' . $li['controller'] . '/' . $li['action'];
+                    $act = explode(',',$li['action']);
+                    $href = \think\Request::instance()->root().'/'. $li['module'] . '/' . $li['controller'] . '/' . $act[0];
                     if( !empty($li['condition']) ) {
                         $href .= '?' . $li['condition'];
                     }
