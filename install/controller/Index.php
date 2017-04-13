@@ -15,7 +15,7 @@ class Index extends Controller
         }
         if ( Request::instance()->isPost() ) {
             restore_exception_handler();
-            if(!is_file(APP_PATH.'install'.DS.'godoa.sql')) {
+            if(!is_file(APP_PATH.'install'.DS.'goauth.sql')) {
                 return ['code'=>-1000, 'msg'=>'未找到数据库备份文件！'];
             }
             

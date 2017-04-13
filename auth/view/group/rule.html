@@ -46,16 +46,14 @@
                 <div id="nestable-menu">
                     <button type="button" data-action="expand-all" class="btn btn-white btn-sm">展开所有</button>
                     <button type="button" data-action="collapse-all" class="btn btn-white btn-sm">收起所有</button>
-                    <button type="button" data-action="save" class="btn btn-sm btn-primary" id="saveSelected"> 保存</button>
+
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>权限菜单管理 </h5>
-                    </div>
+       
                     <div class="ibox-content">
 
                         <div class="dd" id="rid0" >
@@ -107,44 +105,8 @@ $(document).ready(function() {
         if (action === "collapse-all") {
             $(".dd").nestable("collapseAll")
         }
-		if (action === "save") {
-			ids = '';
-            var $rules  = $("input[name='rule[]']:checked").each(function(){
-				ids += ',' + $(this).val();
-			})
-			save({rules : ids})
-        }
     });
-	
-	//保存菜单
-	function save(formData){
-		$.ajax({
-			type : 'POST',
-			url : '<?php echo \think\Request::instance()->root(); ?>/auth/Group/rule?id={$id}',
-			dataType : 'json',
-			data : formData,
-			async:false,
-			success : function(result) {
-				//layer.close(layer1);
-				if(0 === result.code) {
-					//保存成功
-					if(parent.length) {
-						parent.ruleSuccess(result);
-					} else {
-						layer.msg('保存成功', {icon: 1});
-					}
-					
-				}  else  {
-					//保存失败
-					layer.msg(result.msg, {icon: 5});
-				}
-			},
-			error : function(){
-				layer.msg('服务器错误！请稍后重试', {icon: 2});
-			}
-		})
-	}
-	
+
 	
 });	
 </script>

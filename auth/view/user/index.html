@@ -191,7 +191,7 @@ $(document).ready(function() {
 		  title: '新增用户',
 		  shadeClose: true,
 		  shade: 0.8,
-		  area: ['90%', '90%'],
+		  area: ['80%', '90%'],
 		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/User/add' //iframe的url
 	  	});
 	});
@@ -204,7 +204,7 @@ $(document).ready(function() {
 		  title: '修改用户',
 		  shadeClose: true,
 		  shade: 0.8,
-		  area: ['90%', '90%'],
+		  area: ['80%', '90%'],
 		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/User/edit?id='+id //iframe的url
 	  	});
 	})
@@ -217,8 +217,29 @@ $(document).ready(function() {
 		  title: '绑定权限组',
 		  shadeClose: true,
 		  shade: 0.8,
-		  area: ['90%', '80%'],
-		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/User/group?id='+id //iframe的url
+		  area: ['600px', '90%'],
+		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/User/group?id='+id, //iframe的url
+		  btn: ['确定', '取消'] //可以无限个按钮
+		  ,btn1: function(index, layero){
+			//按钮【按钮三】的回调
+			var list = [];
+			var d = $('iframe',layero)[0].contentDocument;
+			$("input[name='group[]']:checked",d).each(function(index, element) {
+				list.push($(this).val());	
+			});
+			var group = '';
+			if(list.length > 0) {
+				group = list.join(',');
+			}
+			if (
+				post('<?php echo \think\Request::instance()->root(); ?>/auth/User/group?id='+id, {group : group})
+			){
+				layer.msg('保存成功！', {icon: 1});
+				layer.close(index);
+			} 
+
+			
+		  }
 	  	});
 	})
 

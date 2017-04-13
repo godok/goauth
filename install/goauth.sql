@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `goa_users` (
   `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像，相对于upload/avatar目录',
   `email` varchar(100) NOT NULL DEFAULT '' COMMENT '登录邮箱',
   `email_code` varchar(60) DEFAULT NULL COMMENT '激活码',
-  `phone` bigint(11) unsigned DEFAULT NULL COMMENT '手机号',
+  `phone` char(11) DEFAULT '' COMMENT '手机号',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '用户状态 0：禁用； 1：正常 ；2：未验证',
   `register_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
   `last_login_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '最后登录ip',

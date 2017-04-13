@@ -32,9 +32,7 @@
                 <div class="ibox float-e-margins">
                   <div class="ibox-content">
                       <div class="row">
-                            <div class="col-xs-3">
-                                <button type="button" class="btn btn-sm btn-primary" id="saveSelected"> 保存</button> </span>
-                            </div>
+   
                           	<div class="col-xs-8">
                                 <div class="input-group">
                                 <form action="" method="get" enctype="application/x-www-form-urlencoded">
@@ -104,53 +102,7 @@ $(document).ready(function() {
 	$("#checkall").bind("ifUnchecked",function(){
 		$("input[name='group[]']").iCheck("uncheck");
 	});
-	$("#saveSelected").bind("click",function(){
-		var ids = '';
-		$("input[name='group[]']:checked").each(function(index, element) {
-            $tr = $(this).closest("tr");
-			ids += $tr.data("id") + ','
-			
-        });	
-
-		if (
-			save({group : ids})
-		){
-			if(parent.length) {
-				parent.groupSucess(1);
-			} else {
-				layer.msg('保存成功', {icon: 1});
-			}
-			
-		}
-		
-	});
-    
 	
-	//快捷修改
-	function save(formData){
-		var res = false;
-		$.ajax({
-			type : 'POST',
-			url : '<?php echo \think\Request::instance()->root(); ?>/auth/User/group?id={$id}',
-			dataType : 'json',
-			data : formData,
-			async:false,
-			success : function(result) {
-				//layer.close(layer1);
-				if(0 === result.code) {
-					res = result;
-				}  else  {
-					//修改失败
-					res = false;
-					layer.msg(result.msg, {icon: 5});
-				}
-			},
-			error : function(){
-				res = false;
-				layer.msg('服务器错误！请稍后重试', {icon: 2});
-			}
-		})
-		return res;
-	}
+
 });	
 </script>

@@ -153,11 +153,7 @@
 
 </html>
 <script>
-var layer_font;
-function ruleSuccess(result){
-	layer.close(layer_font);
-	layer.msg('保存成功！', {icon: 1});
-}
+
 $(document).ready(function() {
 	$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",});
 
@@ -280,13 +276,34 @@ $(document).ready(function() {
 	$("#listtable").on("click",".fa-wrench",function(){
 		var $tr = $(this).closest("tr");
 		var id = $tr.data("id");
-		layer_font = layer.open({
+		layer.open({
 		  type: 2,
 		  title: '绑定权限',
 		  shadeClose: true,
 		  shade: 0.8,
-		  area: ['80%', '90%'],
-		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/Group/rule?id='+id //iframe的url
+		  area: ['700px', '90%'],
+		  content: '<?php echo \think\Request::instance()->root(); ?>/auth/Group/rule?id='+id, //iframe的url
+		  btn: ['确定', '取消'] //可以无限个按钮
+		  ,btn1: function(index, layero){
+			//按钮【按钮三】的回调
+			var list = [];
+			var d = $('iframe',layero)[0].contentDocument;
+			$("input[name='rule[]']:checked",d).each(function(index, element) {
+				list.push($(this).val());	
+			});
+			var rules = '';
+			if(list.length > 0) {
+				rules = list.join(',');
+			}
+			if (
+				post('<?php echo \think\Request::instance()->root(); ?>/auth/Group/rule?id='+id, {rules : rules})
+			){
+				layer.msg('保存成功！', {icon: 1});
+				layer.close(index);
+			} 
+
+			
+		  }
 	  	});
 	})
 	
