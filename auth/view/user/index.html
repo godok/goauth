@@ -232,7 +232,7 @@ $(document).ready(function() {
 				group = list.join(',');
 			}
 			if (
-				post('<?php echo \think\Request::instance()->root(); ?>/auth/User/group?id='+id, {group : group})
+				post('/auth/User/group?id='+id, {group : group})
 			){
 				layer.msg('保存成功！', {icon: 1});
 				layer.close(index);

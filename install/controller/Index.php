@@ -10,7 +10,7 @@ class Index extends Controller
 {
     public function index()
     {
-        if(is_file(APP_PATH.'install'.DS.'godoa.sql.lock')) {
+        if(is_file(APP_PATH.'install'.DS.'goauth.sql.lock')) {
             $this->error('已经安装');
         }
         if ( Request::instance()->isPost() ) {
@@ -85,7 +85,7 @@ return [
             try {
                 $conn = new \PDO("mysql:host=".$data['hostname'].";port=".$data['hostport'].";dbname=".$data['database'], $data['username'], $data['password']);
                 $conn->exec("SET NAMES 'utf8';");
-                $sql = explode(';', file_get_contents(APP_PATH.'install'.DS.'godoa.sql'));
+                $sql = explode(';', file_get_contents(APP_PATH.'install'.DS.'goauth.sql'));
                 foreach($sql as $s) {
                     if( !empty($s) ) {
                         $conn->exec($s);

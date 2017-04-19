@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `goa_auth_group` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户组表' ;
 INSERT INTO `goa_auth_group` (`id`, `title`, `status`, `rules`, `description`, `listorder`) VALUES
 (1, '超级管理员', 1, 'all', '拥有所有权限', 0),
-(2, '登录用户', 1, '4,5,6,7,8', '作用于所有登录用户', 0),
+(2, '登录用户', 1, '4,5,6,7,8,22', '作用于所有登录用户', 0),
 (3, '游客', 1, '2,3', '未登录访客默认权限', 0);
 CREATE TABLE IF NOT EXISTS `goa_auth_group_relation` (
   `uid` int(11) unsigned NOT NULL COMMENT '用户id',
@@ -43,6 +43,7 @@ INSERT INTO `goa_auth_rule` (`id`, `pid`, `title`, `module`, `controller`, `acti
 (6, 4, '个人信息', 'auth', 'Profile', '*', 1, 0, '', '', 3),
 (7, 4, '修改密码', 'auth', 'Password', '*', 1, 0, '', '', 1),
 (8, 4, '修改头像', 'auth', 'Avatar', '*', 1, 0, '', '', 2),
+(22, 4, '主面板', 'auth', 'Index', 'home', 1, 0, '', '', 4),
 (9, 1, '权限组', 'auth', 'Group', 'index', 1, 1, '', '', 0),
 (10, 9, '新增', 'auth', 'Group', 'add', 1, 0, '', '', 0),
 (11, 9, '修改', 'auth', 'Group', 'edit', 1, 0, '', '', 1),

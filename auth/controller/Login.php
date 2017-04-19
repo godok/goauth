@@ -47,34 +47,10 @@ class Login extends Controller
 	                'avatar'=>$data['avatar'],
 	                'email'=>$data['email'],
 	                'phone'=>$data['phone'],
-	                'rules'=>[],
-	                'groupids'=>[]
+	                'rules'=>Auth::getRules($data['id']),
+	                'groupids'=>Auth::getGroupids($data['id'])
 	            ];
-	            Cookie::set('avatar', $data['avatar'] ?: Config::get('site.resource_url').'images/avatar/default.jpg', 3600*24*7);
-	            Cookie::set('nickname', $data['nickname'], 3600*24*7);
-	            //获取权限组信息
-	            $groups = Auth::getGroups( $data['id'] );
-	            $group23 = Db::name( Config::get('auth.table_group') )->field('id,rules')->where('id IN(2,3) AND status=1')->select();
-	            $groups = array_merge($groups,$group23);
-	            if (empty($groups)) {
-	                return ['code'=>-1040,'msg'=>'帐号无权限'];
-	            } else {
-	                $rules = '';
-	                foreach ( $groups as $group) {
-	                    $rules .= $rules ? ',' . $group['rules'] : $group['rules'];
-	                    if ($group['id'] !=2 && $group['id'] != 3) {
-	                        $user['groupids'][] = $group['id'];
-	                    }
-	                    
-	                }
-	                if ( !empty($rules) ) {
-	                    $user['rules'] = array_unique( explode(',', $rules) );
-	                }
-	                
-	                $user['_freshtime'] = time();
-	            }
 	            //判断用户组是否被禁用
-	            Auth::clear();
 	            Auth::user($user);
 	            //保存登录信息
 	            Db::name( Config::get('auth.table_user') )
@@ -96,7 +72,7 @@ class Login extends Controller
     // http://127.0.0.1/auth/Login/logout
     public function logout()
     {
-        Auth::clear();
+        Auth::clean();
         $this->success('退出成功、前往登录页面',\think\Request::instance()->root().'/auth/Login/index');
     }
 

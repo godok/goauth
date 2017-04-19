@@ -269,8 +269,6 @@ $(document).ready(function() {
 		function(){
 			
 		});
-
-		
 	});
 	//绑定权限按钮
 	$("#listtable").on("click",".fa-wrench",function(){
@@ -296,7 +294,7 @@ $(document).ready(function() {
 				rules = list.join(',');
 			}
 			if (
-				post('<?php echo \think\Request::instance()->root(); ?>/auth/Group/rule?id='+id, {rules : rules})
+				post('/auth/Group/rule?id='+id, {rules : rules})
 			){
 				layer.msg('保存成功！', {icon: 1});
 				layer.close(index);
