@@ -351,6 +351,10 @@ class User extends Controller
             if ( !empty($keywords) ) {
                 $query->where('title', 'like', '%'.$keywords.'%');
             }
+            $data['checked'] = Request::instance()->param("group/a",[]);
+            if ( !empty($data['checked']) ) {
+                $query->whereOr('id', 'in', $data['checked']);
+            }
             $data['list'] = $query->limit(255)->select();
             $groups = Auth::getGroups($id);
             $data['groups'] = [];

@@ -50,9 +50,11 @@ class Login extends Controller
 	                'rules'=>Auth::getRules($data['id']),
 	                'groupids'=>Auth::getGroupids($data['id'])
 	            ];
-	            //判断用户组是否被禁用
-	            Auth::user($user);
+	            //保存基本信息
+	            Cookie::set('nickname', $data['nickname'], 3600*24*7);
+	            Cookie::set('avatar', $data['avatar'] ?: Config::get('site.resource_url').'images/avatar/default.jpg', 3600*24*7);
 	            //保存登录信息
+	            Auth::user($user);
 	            Db::name( Config::get('auth.table_user') )
 	            ->where(['id' => $data['id']])
 	            ->update([

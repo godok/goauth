@@ -28,6 +28,14 @@
 <body class="gray-bg">
     <div class="wrapper wrapper-content animated fadeInRight">
       <div class="row">
+            <div class="col-sm-4">
+                <div id="nestable-menu">
+                	<button type="button" data-action="addnew" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> 新增</button>
+                    <button type="button" data-action="save" class="btn btn-success btn-sm">保存选中</button>
+                </div>
+            </div>
+      </div>
+      <div class="row">
           <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
@@ -36,10 +44,6 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-sm-3">
-                            	<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-form"> 新增</button>
-                                <button type="button" class="btn btn-sm btn-success" id="saveSelected"> 保存选中</button> </span>
-                            </div>
                           	<div class="col-sm-8">
                                 <div class="input-group">
                                 <form action="" method="get" enctype="application/x-www-form-urlencoded">
@@ -165,33 +169,45 @@ $(document).ready(function() {
 	$("#checkall").bind("ifUnchecked",function(){
 		$("input[name='ids[]']").iCheck("uncheck");
 	});
-	$("#saveSelected").bind("click",function(){
-		var list = [];
-		$("input[name='ids[]']:checked").each(function(index, element) {
-            $tr = $(this).closest("tr");
-			var data = {
-				id : $tr.data("id"),
-				listorder : $tr.find("td:eq(1) input").val(),
-				title : $tr.find("td:eq(3) input").val(),
-				description : $tr.find("td:eq(4) input").val(),
+	//顶部按钮
+    $("#nestable-menu").on("click",
+    function(e) {
+        var target = $(e.target),
+        action = target.data("action");
+		//新增
+        if (action === "addnew") {
+            $('#modal-form').modal('show');
+        }
+		//保存排序
+        if (action === "save") {
+            var list = [];
+			$("input[name='ids[]']:checked").each(function(index, element) {
+				$tr = $(this).closest("tr");
+				var data = {
+					id : $tr.data("id"),
+					listorder : $tr.find("td:eq(1) input").val(),
+					title : $tr.find("td:eq(3) input").val(),
+					description : $tr.find("td:eq(4) input").val(),
+				}
+				list.push(data);
+				
+			});
+			if(list.length < 1) {
+				layer.msg('请至少选中一项', {icon: 5});
+				return false;
 			}
-			list.push(data);
 			
-        });
-		if(list.length < 1) {
-			layer.msg('请至少选中一项', {icon: 5});
-			return false;
-		}
-		
-		if (
-			post('/auth/Group/edit',window.JSON.stringify(list))
-		){
-			layer.msg('保存成功！', {icon: 1});
-		} else {
-			//layer.msg('保存失败', {icon: 5});
-		}
-		
-	});
+			if (
+				post('/auth/Group/edit',window.JSON.stringify(list))
+			){
+				layer.msg('保存成功！', {icon: 1});
+			} else {
+				//layer.msg('保存失败', {icon: 5});
+			}
+        }
+
+    });
+	
     
 	//保存按钮注册
 	$("#modal-form .btn-primary").bind("click",function(){

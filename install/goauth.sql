@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `goa_auth_group` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` char(100) NOT NULL DEFAULT '',
   `status` tinyint(1) NOT NULL DEFAULT '1',
-  `rules` text COMMENT '规则id',
+  `rules` text NOT NULL DEFAULT '' COMMENT '规则id',
   `description` varchar(255) NOT NULL DEFAULT '' COMMENT '说明',
   `listorder` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`)
